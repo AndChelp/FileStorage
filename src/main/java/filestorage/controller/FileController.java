@@ -31,21 +31,24 @@ public class FileController {
     @GetMapping("/{uuid}")
     public HttpEntity<byte[]> downloadFile(@PathVariable UUID uuid) throws IOException {
         FileInfo fileInfo = fileService.getFile(uuid);
-        HttpHeaders header = new HttpHeaders();
-        header.set("Content-Disposition", "attachment; filename=" + fileInfo.getName());
-        header.setContentLength(fileInfo.getSize());
-        return new HttpEntity<>(fileInfo.getFile(), header);
+        return new HttpEntity<>(
+                fileInfo.getFile(),
+                crateHeader(fileInfo.getName(), (int) fileInfo.getSize()));
     }
 
     @GetMapping
     public HttpEntity<byte[]> downloadZip(@RequestParam UUID[] uuids) throws IOException {
-
         byte[] archive = fileService.getFilesAsArchive(uuids);
+        return new HttpEntity<>(
+                archive,
+                crateHeader("files.zip", archive.length));
+    }
 
+    private HttpHeaders crateHeader(String filename, int fileSize) {
         HttpHeaders header = new HttpHeaders();
-        header.set("Content-Disposition", "attachment; filename=Files.zip");
-        header.setContentLength(archive.length);
-        return new HttpEntity<>(archive, header);
+        header.set("Content-Disposition", "attachment; filename=" + filename);
+        header.setContentLength(fileSize);
+        return header;
     }
 }
 

@@ -27,19 +27,17 @@ public class FileInfoController {
     }
 
     @GetMapping
-    public ResponseEntity<ListDto> getFilesInfo(@RequestParam(required = false, name = "name_query")
-                                                        String nameQuery,
+    public ResponseEntity<ListDto> getFilesInfo(@RequestParam(required = false, name = "name_contains")
+                                                        String nameContains,
                                                 @RequestParam(required = false, name = "from_date")
-                                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                                        Timestamp fromDate,
+                                                        Long fromDate,
                                                 @RequestParam(required = false, name = "till_date")
-                                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                                        Timestamp tillDate,
+                                                        Long tillDate,
                                                 @RequestParam(required = false)
                                                         Set<String> types) {
 
         return new ResponseEntity<>(
-                new ListDto(fileService.getFilesInfo(nameQuery, fromDate, tillDate, types)),
+                new ListDto(fileService.getFilesInfo(nameContains, fromDate, tillDate, types)),
                 HttpStatus.OK);
     }
 

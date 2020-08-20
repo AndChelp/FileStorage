@@ -32,8 +32,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ExceptionDto(ex.getMessage(), HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(NullFileException.class)
-    public ResponseEntity<ExceptionDto> handleFileIsEmpty(Exception ex) {
+    @ExceptionHandler({ZipException.class, NullFileException.class})
+    public ResponseEntity<ExceptionDto> handleZipException(Exception ex) {
         logger.log(Level.INFO, ex.getMessage());
         return new ResponseEntity<>(new ExceptionDto(ex.getMessage(), HttpStatus.BAD_REQUEST),
                 HttpStatus.BAD_REQUEST);
@@ -57,13 +57,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionDto> handleIllegalArgumentException(Exception ex) {
         logger.log(Level.INFO, ex.getMessage());
         return new ResponseEntity<>(new ExceptionDto("Incorrect argument", HttpStatus.BAD_REQUEST),
-                HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(ZipException.class)
-    public ResponseEntity<ExceptionDto> handleZipException(Exception ex) {
-        logger.log(Level.INFO, ex.getMessage());
-        return new ResponseEntity<>(new ExceptionDto(ex.getMessage(), HttpStatus.BAD_REQUEST),
                 HttpStatus.BAD_REQUEST);
     }
 }
